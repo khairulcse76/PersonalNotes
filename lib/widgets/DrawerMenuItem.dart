@@ -1,5 +1,10 @@
+
 import 'package:flutter/material.dart';
+import 'package:mynotes/activity/ArchiveView.dart';
+import 'package:mynotes/activity/MyHomeActivity.dart';
 import 'package:mynotes/helper/colors.dart';
+
+import '../activity/SettingsActivity.dart';
 
 class DrawerMenuItem extends StatefulWidget {
   const DrawerMenuItem({super.key});
@@ -25,9 +30,9 @@ class _DrawerMenuItemState extends State<DrawerMenuItem> {
               Divider(
                 color: myBlack5.withOpacity(0.3),
               ),
-              NoteSection(),
-              NoteArchive(),
-              NoteSettings(),
+              NoteSection(context),
+              NoteArchive(context),
+              NoteSettings(context),
 
             ],
           ),
@@ -37,7 +42,7 @@ class _DrawerMenuItemState extends State<DrawerMenuItem> {
   }
 }
 
-Widget NoteSection(){
+Widget NoteSection(context){
   return Container(
     margin: EdgeInsets.only(right: 20),
     child: TextButton(
@@ -52,7 +57,9 @@ Widget NoteSection(){
           ),
           )
       ),
-      onPressed: (){},
+      onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomeActivity(),));
+      },
       child: Container(
         margin: EdgeInsets.only(left: 15),
         child: Row(
@@ -67,7 +74,7 @@ Widget NoteSection(){
     ),
   );
 }
-Widget NoteArchive(){
+Widget NoteArchive(context){
   return Container(
     margin: EdgeInsets.only(right: 20),
     child: TextButton(
@@ -81,7 +88,9 @@ Widget NoteArchive(){
           ),
           )
       ),
-      onPressed: (){},
+      onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ArchiveView(),));
+      },
       child: Container(
         margin: EdgeInsets.only(left: 15),
         child: Row(
@@ -96,7 +105,7 @@ Widget NoteArchive(){
     ),
   );
 }
-Widget NoteSettings(){
+Widget NoteSettings(context){
   return Container(
     margin: EdgeInsets.only(right: 20),
     child: TextButton(
@@ -110,7 +119,9 @@ Widget NoteSettings(){
           ),
           )
       ),
-      onPressed: (){},
+      onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsActivity(),));
+      },
       child: Container(
         margin: EdgeInsets.only(left: 15),
         child: Row(

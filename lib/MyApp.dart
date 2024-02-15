@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mynotes/activity/GridViewChecking.dart';
 import 'package:mynotes/activity/MyHomeActivity.dart';
 import 'package:mynotes/helper/colors.dart';
 
@@ -14,7 +15,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Ubuntu',
       ),
       color: bgColor,
-      home: const MyHomeActivity(),
+      //home:  myCustomiseGridView(),
+      home:  MyHomeActivity(),
 
     );
   }

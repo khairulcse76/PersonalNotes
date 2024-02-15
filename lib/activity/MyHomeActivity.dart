@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mynotes/activity/NoteView.dart';
+import 'package:mynotes/activity/SearchNote.dart';
 import 'package:mynotes/helper/colors.dart';
 import 'package:mynotes/widgets/DrawerMenuItem.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
+import 'AddNote.dart';
 
 class MyHomeActivity extends StatefulWidget {
   const MyHomeActivity({super.key});
@@ -12,9 +16,10 @@ class MyHomeActivity extends StatefulWidget {
 
 class _MyHomeActivityState extends State<MyHomeActivity> {
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  bool grid=false;
 
   String heading="Heading";
-  String longNote="The platform offers a high degree of customization, allowing users to personalize their device's appearance, change themes, and use widgets for a unique user experience. It accommodates a wide range of devices, including smartphones, tablets, smart TVs, and other smart devices, providing users with choices from various manufacturers"
+  String longNote="The platform offers a high  of customization, allowing users to pers onalize their device's appearance, change themes, and use widgets for a unique user experience. It accommodates a wide range of devices, including smartphones, tablets, smart TVs, and other smart devices, providing users with choices from various manufacturers"
   "Android integrates seamlessly with Google services like Gmail, Google Maps, and Google Drive. This integration enables the synchronization of data and services across devices, contributing to a cohesive user experience. The operating system features a robust notification system, empowering users to interact with messages and updates promptly.";
   String smallNote="seamlessly with Google services like Gmail";
 
@@ -25,13 +30,23 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
       drawer: const DrawerMenuItem(),
         key: _drawerKey,
         backgroundColor: bgColor,
-
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewNote(),));
+          },
+          child: Icon(Icons.add),
+          backgroundColor: cardColor,
+          foregroundColor: myWhite2,
+          splashColor: bgColor,
+          hoverColor: Colors.green,
+          elevation: 0.0,
+        ),
         body: SafeArea(
             child: Stack(
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+              //height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                 color: bgColor,
               ),
@@ -50,9 +65,9 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
                         ],
                       ),
                     ),
-                    //ListViewCustom(context),
+                    ListViewCustom(context),
                     boxGridView(context),
-                    //ColorGridView(context),
+                    ColorGridView(context),
                   ],
                 ),
               ),
@@ -66,31 +81,35 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
   Container ListViewCustom(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      height: MediaQuery.of(context).size.height,
+      //height: MediaQuery.of(context).size.height,
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         physics: const NeverScrollableScrollPhysics(),
-        itemExtent: 12,
+        itemCount: 10,
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
-          return Container(
-            height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.all(8),
-            //margin: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.white.withOpacity(0.5)),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color:index.isOdd?Colors.white.withOpacity(0.3): Colors.white.withOpacity(0.7),
-            ),
-            //width: MediaQuery.of(context).size.width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(heading, style: TextStyle(fontSize: 22, color: myWhite.withOpacity(0.9), fontWeight: FontWeight.bold),),
-                SizedBox(height: 5,),
-                Text(index.isOdd? smallNote:longNote, style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.7)),),
-              ],
+          return InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(),));
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white.withOpacity(0.5)),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color:index.isOdd?Colors.white.withOpacity(0.3): Colors.white.withOpacity(0.4),
+              ),
+              //width: MediaQuery.of(context).size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(heading, style: TextStyle(fontSize: 22, color: myWhite, fontWeight: FontWeight.bold),),
+                  SizedBox(height: 5,),
+                  Text(index.isOdd?longNote.length>250?"${longNote.substring(0,201)}....." : longNote :smallNote, style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.9)),),
+                ],
+              ),
             ),
           );
         },
@@ -102,7 +121,7 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
   Container boxGridView(BuildContext context) {
     return Container(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    height: MediaQuery.of(context).size.height,
+                    //height: MediaQuery.of(context).size.height,
                     child: MasonryGridView.count(
                       scrollDirection: Axis.vertical,
                       crossAxisCount: 2,
@@ -112,22 +131,27 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
                       itemCount: 120,
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          padding: const EdgeInsets.all(8),
-                          //margin: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white.withOpacity(0.3)),
-                            borderRadius: BorderRadius.all(Radius.circular(10))
-                          ),
-                          //width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(heading, style: TextStyle(fontSize: 22, color: myWhite.withOpacity(0.9), fontWeight: FontWeight.bold),),
-                              SizedBox(height: 5,),
-                              Text(index.isOdd? longNote.length>250?"${longNote.substring(0,150)}...":longNote:smallNote, style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.7)),),
-                            ],
+                        return InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(),));
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            //margin: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white.withOpacity(0.3)),
+                              borderRadius: BorderRadius.all(Radius.circular(10))
+                            ),
+                            //width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(heading, style: TextStyle(fontSize: 22, color: myWhite.withOpacity(0.9), fontWeight: FontWeight.bold),),
+                                SizedBox(height: 5,),
+                                Text(index.isOdd?longNote.length>250?"${longNote.substring(0,201)}....." : longNote :smallNote, style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.7)),),
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -173,7 +197,9 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
                                         borderRadius: BorderRadius.circular(50.00)
                                     ))
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SearchNote(),));
+                                },
                                 child: Container(
                                   padding: EdgeInsets.only(right: 50),
                                   child: Text(
@@ -200,7 +226,9 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
                                   borderRadius: BorderRadius.circular(50.00)
                                 ))
                               ),
-                                onPressed: () {},
+                                onPressed: () {
+                                grid ? false : true;
+                                },
                                 child: Icon(
                                   Icons.grid_view,
                                   color: myWhite1,
@@ -220,8 +248,8 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
 
   Container ColorGridView(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      height: MediaQuery.of(context).size.height,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      //height: MediaQuery.of(context).size.height,
       child: MasonryGridView.count(
         scrollDirection: Axis.vertical,
         crossAxisCount: 2,
@@ -246,7 +274,7 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
               children: [
                 Text(heading, style: TextStyle(fontSize: 22, color: myWhite.withOpacity(0.9), fontWeight: FontWeight.bold),),
                 SizedBox(height: 5,),
-                Text(index.isOdd? smallNote:longNote, style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.7)),),
+                Text(index.isOdd?longNote.length>250?"${longNote.substring(0,201)}....." : longNote :smallNote, style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.7)),),
               ],
             ),
           );
