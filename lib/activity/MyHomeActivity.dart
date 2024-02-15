@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/activity/NoteView.dart';
 import 'package:mynotes/activity/SearchNote.dart';
 import 'package:mynotes/helper/colors.dart';
+import 'package:mynotes/services/db.dart';
 import 'package:mynotes/widgets/DrawerMenuItem.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -17,6 +18,18 @@ class MyHomeActivity extends StatefulWidget {
 class _MyHomeActivityState extends State<MyHomeActivity> {
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   bool grid=false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    createEntry();
+  }
+
+  Future createEntry() async{
+    await NotesDatabase.instance.insertData();
+  }
 
   String heading="Heading";
   String longNote="The platform offers a high  of customization, allowing users to pers onalize their device's appearance, change themes, and use widgets for a unique user experience. It accommodates a wide range of devices, including smartphones, tablets, smart TVs, and other smart devices, providing users with choices from various manufacturers"

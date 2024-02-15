@@ -28,7 +28,7 @@ class _AddNewNote extends State<AddNewNote> {
         elevation: 0.0,
         backgroundColor: myBlack2,
         foregroundColor: myWhite1,
-        title: Text("Edit Note", style: TextStyle(color: Colors.white),),
+        title: const Text("Add New Note", style: TextStyle(color: Colors.white),),
         actions: [
           IconButton(onPressed: (){}, icon: Icon(Icons.save_outlined)),
         ],
