@@ -23,7 +23,7 @@ class NotesDatabase {
     await db.execute('''
       CREATE TABLE notes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        pin INTEGER,
+        pin BOOLEAN NOT NULL,
         title TEXT,
         content TEXT,
         createdTime TEXT
@@ -31,14 +31,53 @@ class NotesDatabase {
     ''');
   }
 
-  Future<bool> insertData() async {
-    final db = await database;
-    final id = await db?.insert("notes", {
-      "pin": 0, // Assuming pin is an integer (0 for false, 1 for true)
-      "title": "My Notes Title",
-      "content": "This is Content",
+  Future<bool?> insertData() async {
+    final db = await instance.database;
+    await db?.insert("notes", {
+      "pin": 1, // Assuming pin is an integer (0 for false, 1 for true)
+      "title": "My Notes Title 234",
+      "content": "This is Content 234",
       "createdTime": "15-Feb-2024"
     });
-    return id != null;
+    return true;
   }
+
+  Future<String> ReadAllData() async{
+    final db = await instance.database;
+    //final orderBy =  'createdTime DESC';
+    final orderBy =  'id DESC';
+    final query_result= await db?.query('Notes', orderBy: orderBy);
+    print(query_result);
+    return 'Success';
+  }
+  Future<String> ReadOneData(int id) async{
+    final db = await instance.database;
+    final map= await db?.query('Notes',
+        columns: ['title'],
+      where: 'id=?',
+      whereArgs: [id]
+    );
+    print(map);
+    return 'Success';
+  }
+
+  Future UpdateData(int id) async{
+    final db = await instance.database;
+    final mapupdate= await db?.update('Notes',
+        {"title":"this is update Title", "content":"this is update content"},
+    where: "id=?",
+      whereArgs: [id],
+    );
+    print(mapupdate);
+    return 'Success';
+  }
+  
+  Future DeleteEntry(int id) async{
+    final db = await instance.database;
+    await db?.delete("Notes",
+    where: 'id=?',
+      whereArgs: [id],
+    );
+  }
+  
 }

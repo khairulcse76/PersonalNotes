@@ -33,7 +33,6 @@ class _DrawerMenuItemState extends State<DrawerMenuItem> {
               NoteSection(context),
               NoteArchive(context),
               NoteSettings(context),
-
             ],
           ),
         ),
@@ -55,10 +54,10 @@ Widget NoteSection(context){
               bottomRight: Radius.circular(50.0),
             ),
           ),
-          )
+        ),
       ),
       onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomeActivity(),));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomeActivity(),));
       },
       child: Container(
         margin: EdgeInsets.only(left: 15),
@@ -76,7 +75,7 @@ Widget NoteSection(context){
 }
 Widget NoteArchive(context){
   return Container(
-    margin: EdgeInsets.only(right: 20),
+    margin: const EdgeInsets.only(right: 20),
     child: TextButton(
       style:ButtonStyle(
           overlayColor: MaterialStateColor.resolveWith((states) => myWhite.withOpacity(0.3)),

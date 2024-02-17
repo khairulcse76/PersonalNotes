@@ -24,11 +24,28 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
     // TODO: implement initState
     super.initState();
 
-    createEntry();
+    //deleteData();
+    //createEntry();
+    getAllNotes();
+    //getOneNote();
+    //updateoneNotes();
   }
 
   Future createEntry() async{
     await NotesDatabase.instance.insertData();
+  }
+
+  Future getAllNotes() async{
+    await NotesDatabase.instance.ReadAllData();
+  }
+  Future getOneNote() async{
+    await NotesDatabase.instance.ReadOneData(13);
+  }
+  Future updateoneNotes() async{
+    await NotesDatabase.instance.UpdateData(13);
+  }
+  Future deleteData() async{
+    await NotesDatabase.instance.DeleteEntry(9);
   }
 
   String heading="Heading";
@@ -47,12 +64,12 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewNote(),));
           },
-          child: Icon(Icons.add),
           backgroundColor: cardColor,
           foregroundColor: myWhite2,
           splashColor: bgColor,
           hoverColor: Colors.green,
           elevation: 0.0,
+          child: const Icon(Icons.add),
         ),
         body: SafeArea(
             child: Stack(
