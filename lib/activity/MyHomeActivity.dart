@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/activity/NoteView.dart';
 import 'package:mynotes/activity/SearchNote.dart';
 import 'package:mynotes/helper/colors.dart';
+import 'package:mynotes/model/MyNoteModel.dart';
 import 'package:mynotes/services/db.dart';
 import 'package:mynotes/widgets/DrawerMenuItem.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -16,6 +17,11 @@ class MyHomeActivity extends StatefulWidget {
 }
 
 class _MyHomeActivityState extends State<MyHomeActivity> {
+
+  List<Note> notesList = [];
+bool isLoading = true;
+bool isGridView=true;
+
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   bool grid=false;
 
@@ -25,27 +31,34 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
     super.initState();
 
     //deleteData();
-    //createEntry();
+    createEntry(Note(pin: false, title: "Small Android 4 ",
+    content: "$longNote",
+     createdTime: DateTime.now()));
     getAllNotes();
     //getOneNote();
     //updateoneNotes();
   }
 
-  Future createEntry() async{
-    await NotesDatabase.instance.insertData();
+  Future createEntry(Note note) async{
+    await NotesDatabase.instance.insertData(note);
   }
 
   Future getAllNotes() async{
-    await NotesDatabase.instance.ReadAllData();
+   this.notesList =  await NotesDatabase.instance.ReadAllData();
+
+  await Future.delayed( const Duration(seconds: 1));
+   setState(() {
+     isLoading=false;
+   });
   }
-  Future getOneNote() async{
-    await NotesDatabase.instance.ReadOneData(13);
+  Future getOneNote(int id) async{
+    await NotesDatabase.instance.ReadOneData(id);
   }
-  Future updateoneNotes() async{
-    await NotesDatabase.instance.UpdateData(13);
+  Future updateOneNotes(Note note) async{
+    await NotesDatabase.instance.UpdateData(note);
   }
   Future deleteData() async{
-    await NotesDatabase.instance.DeleteEntry(9);
+    await NotesDatabase.instance.DeleteEntry(13);
   }
 
   String heading="Heading";
@@ -55,7 +68,8 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading? Scaffold(backgroundColor: bgColor,body:Center(child: Container(child: CircularProgressIndicator(color: Colors.blue,),),),):
+      Scaffold(
       endDrawerEnableOpenDragGesture: true,
       drawer: const DrawerMenuItem(),
         key: _drawerKey,
@@ -95,9 +109,8 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
                         ],
                       ),
                     ),
-                    ListViewCustom(context),
-                    boxGridView(context),
-                    ColorGridView(context),
+                    isGridView?boxGridView(context):ListViewCustom(context),
+                    //ColorGridView(context),
                   ],
                 ),
               ),
@@ -115,7 +128,7 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: 10,
+        itemCount: notesList.length,
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
@@ -135,9 +148,9 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(heading, style: TextStyle(fontSize: 22, color: myWhite, fontWeight: FontWeight.bold),),
+                  Text(notesList[index].title, style: TextStyle(fontSize: 22, color: myWhite, fontWeight: FontWeight.bold),),
                   SizedBox(height: 5,),
-                  Text(index.isOdd?longNote.length>250?"${longNote.substring(0,201)}....." : longNote :smallNote, style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.9)),),
+                  Text(notesList[index].content.length>250?"${notesList[index].content.substring(0,201)}....." : notesList[index].content , style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.9)),),
                 ],
               ),
             ),
@@ -150,7 +163,7 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
   // my written codded
   Container boxGridView(BuildContext context) {
     return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     //height: MediaQuery.of(context).size.height,
                     child: MasonryGridView.count(
                       scrollDirection: Axis.vertical,
@@ -158,7 +171,7 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 120,
+                      itemCount: notesList.length,
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
@@ -170,16 +183,16 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
                             //margin: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.white.withOpacity(0.3)),
-                              borderRadius: BorderRadius.all(Radius.circular(10))
+                              borderRadius: const BorderRadius.all(Radius.circular(10))
                             ),
                             //width: MediaQuery.of(context).size.width,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(heading, style: TextStyle(fontSize: 22, color: myWhite.withOpacity(0.9), fontWeight: FontWeight.bold),),
+                                Text(notesList[index].title, style: TextStyle(fontSize: 22, color: myWhite.withOpacity(0.9), fontWeight: FontWeight.bold),),
                                 SizedBox(height: 5,),
-                                Text(index.isOdd?longNote.length>250?"${longNote.substring(0,201)}....." : longNote :smallNote, style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.7)),),
+                                Text(notesList[index].content.length>250?"${notesList[index].content.substring(0,201)}....." : notesList[index].content , style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.7)),),
                               ],
                             ),
                           ),
@@ -257,7 +270,9 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
                                 ))
                               ),
                                 onPressed: () {
-                                grid ? false : true;
+                                setState(() {
+                                  isGridView= isGridView?false:true;
+                                });
                                 },
                                 child: Icon(
                                   Icons.grid_view,
