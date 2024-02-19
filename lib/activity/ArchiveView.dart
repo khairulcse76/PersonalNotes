@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/activity/NoteView.dart';
 import 'package:mynotes/helper/colors.dart';
+import 'package:mynotes/model/MyNoteModel.dart';
 import 'package:mynotes/widgets/DrawerMenuItem.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -88,7 +89,7 @@ class _ArchiveViewState extends State<ArchiveView> {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(),));
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(note,),));
             },
             child: Container(
               padding: const EdgeInsets.all(8),
@@ -131,7 +132,7 @@ class _ArchiveViewState extends State<ArchiveView> {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(),));
+             // Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(),));
             },
             child: Container(
               padding: const EdgeInsets.all(8),

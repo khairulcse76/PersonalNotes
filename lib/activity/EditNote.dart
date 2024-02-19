@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mynotes/activity/NoteView.dart';
 import 'package:mynotes/helper/colors.dart';
+import 'package:mynotes/model/MyNoteModel.dart';
+import 'package:mynotes/services/db.dart';
 
 class EditNote extends StatelessWidget {
-  EditNote({super.key});
-
-  String heading="Heading";
-  String longNote="The platform offers a high  of customization, allowing users to pers onalize their device's appearance, change themes, and use widgets for a unique user experience. It accommodates a wide range of devices, including smartphones, tablets, smart TVs, and other smart devices, providing users with choices from various manufacturers"
-      "Android integrates seamlessly with Google services like Gmail, Google Maps, and Google Drive. This integration enables the synchronization of data and services across devices, contributing to a cohesive user experience. The operating system features a robust notification system, empowering users to interact with messages and updates promptly."
-      "Android integrates seamlessly with Google services like Gmail, Google Maps, and Google Drive. This integration enables the synchronization of data and services across devices, contributing to a cohesive user experience. The operating system features a robust notification system, empowering users to interact with messages and updates promptly."
-      "Android integrates seamlessly with Google services like Gmail, Google Maps, and Google Drive. This integration enables the synchronization of data and services across devices, contributing to a cohesive user experience. The operating system features a robust notification system, empowering users to interact with messages and updates promptly."
-      "Android integrates seamlessly with Google services like Gmail, Google Maps, and Google Drive. This integration enables the synchronization of data and services across devices, contributing to a cohesive user experience. The operating system features a robust notification system, empowering users to interact with messages and updates promptly."
-      "Android integrates seamlessly with Google services like Gmail, Google Maps, and Google Drive. This integration enables the synchronization of data and services across devices, contributing to a cohesive user experience. The operating system features a robust notification system, empowering users to interact with messages and updates promptly.";
-  String smallNote="seamlessly with Google services like Gmail";
+  Note note;
+  EditNote({super.key, required this.note});
 
   @override
   Widget build(BuildContext context) {
+    String heading = note.title;
+    String description = note.content;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -23,7 +20,11 @@ class EditNote extends StatelessWidget {
         foregroundColor: myWhite1,
         title: Text("Edit Note", style: TextStyle(color: Colors.white),),
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.save_outlined)),
+          IconButton(onPressed: ()async{
+            Note newNote=Note(id: note.id,pin: false,title: heading, content: description, createdTime: DateTime.now());
+            await NotesDatabase.instance.UpdateData(newNote);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NoteView(note: newNote)));
+          }, icon: Icon(Icons.save_outlined)),
         ],
       ),
       backgroundColor: bgColor,
@@ -36,23 +37,31 @@ class EditNote extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
+              Form(child: TextFormField(
+                initialValue: heading,
+                onChanged: (value){
+                  heading=value;
+                },
                 style: TextStyle( fontSize: 25, color: myWhite),
                 decoration: InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  hintText: 'Title',
-                  hintStyle: TextStyle(
-                    color: Colors.grey.withOpacity(0.8),
-                    fontWeight: FontWeight.bold
-                  )
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    hintText: 'Title',
+                    hintStyle: TextStyle(
+                        color: Colors.grey.withOpacity(0.8),
+                        fontWeight: FontWeight.bold
+                    )
                 ),
-              ),
+              ),),
               SizedBox(
                 height: 300,
-                child: TextField(
+                child: Form(child: TextFormField(
+                  initialValue: description,
+                  onChanged: (value){
+                    description=value;
+                  },
                   style: TextStyle( fontSize: 18, color: myWhite),
                   keyboardType: TextInputType.multiline,
                   minLines: 50,
@@ -68,6 +77,7 @@ class EditNote extends StatelessWidget {
                           fontWeight: FontWeight.bold
                       )
                   ),
+                ),
                 ),
               ),
 

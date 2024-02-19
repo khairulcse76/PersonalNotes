@@ -31,9 +31,9 @@ bool isGridView=true;
     super.initState();
 
     //deleteData();
-    createEntry(Note(pin: false, title: "Small Android 4 ",
-    content: "$longNote",
-     createdTime: DateTime.now()));
+    /*createEntry(Note(pin: false, title: "This Title for Small post",
+    content: "$smallNote",
+     createdTime: DateTime.now()));*/
     getAllNotes();
     //getOneNote();
     //updateoneNotes();
@@ -57,8 +57,8 @@ bool isGridView=true;
   Future updateOneNotes(Note note) async{
     await NotesDatabase.instance.UpdateData(note);
   }
-  Future deleteData() async{
-    await NotesDatabase.instance.DeleteEntry(13);
+  Future deleteData(Note note) async{
+    await NotesDatabase.instance.DeleteEntry(note);
   }
 
   String heading="Heading";
@@ -133,7 +133,7 @@ bool isGridView=true;
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(),));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(note: notesList[index]),));
             },
             child: Container(
               padding: const EdgeInsets.all(8),
@@ -176,7 +176,7 @@ bool isGridView=true;
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(),));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(note: notesList[index])));
                           },
                           child: Container(
                             padding: const EdgeInsets.all(8),

@@ -79,21 +79,21 @@ class NotesDatabase {
     );
   }
   
-  /*Future DeleteEntry(Note note) async{
+  Future DeleteEntry(Note note) async{
     final db = await instance.database;
     await db?.delete(NotesImpNames.tableName,
     where: '${NotesImpNames.id  }=?',
       whereArgs: [note.id],
     );
-  }*/
-  Future DeleteEntry(int id) async{
+  }
+  /*Future DeleteEntry(int id) async{
     final db = await instance.database;
     await db?.delete("Notes",
     where: 'id=?',
       whereArgs:[id]
     );
   }
-
+*/
   Future closeDB() async{
     final db = await instance.database;
     db!.close();
