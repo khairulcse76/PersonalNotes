@@ -83,7 +83,7 @@ bool isGridView=true;
           splashColor: bgColor,
           hoverColor: Colors.green,
           elevation: 0.0,
-          child: const Icon(Icons.add),
+          child: const Icon(Icons.add, size: 45,),
         ),
         body: SafeArea(
             child: Stack(

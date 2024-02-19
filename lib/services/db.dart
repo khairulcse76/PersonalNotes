@@ -28,6 +28,7 @@ class NotesDatabase {
       CREATE TABLE ${NotesImpNames.tableName} (
         ${NotesImpNames.id} $idType,
         ${NotesImpNames.pin} $boolType,
+        ${NotesImpNames.isArchive} $boolType,
         ${NotesImpNames.title} $textType,
         ${NotesImpNames.content} $textType,
         ${NotesImpNames.createdTime} $textType
@@ -78,7 +79,40 @@ class NotesDatabase {
       whereArgs: [note.id],
     );
   }
-  
+  /*Future PinUpdate(Note note) async {
+    final db = await instance.database;
+    final newPinValue = note.copy(pin: !note.pin).pin;
+    print('New Pin Value: $newPinValue');
+
+    await db!.update(
+      NotesImpNames.tableName,
+      {NotesImpNames.pin: newPinValue ? 1 : 0},
+      where: "${NotesImpNames.id}=?",
+      whereArgs: [note.id],
+    );
+  }
+*/
+  Future PinUpdate(Note note) async {
+    final db = await instance.database;
+    await db!.update(
+      NotesImpNames.tableName,
+      {NotesImpNames.pin: note.copy(pin: !note.pin).pin ? 1 : 0},
+      where: "${NotesImpNames.id}=?",
+      whereArgs: [note.id],
+    );
+  }
+
+  Future ArchiveUpdate(Note note) async {
+    final db = await instance.database;
+    await db!.update(
+      NotesImpNames.tableName,
+      {NotesImpNames.isArchive: note.copy(isArchive: !note.isArchive).isArchive ? 1 : 0},
+      where: "${NotesImpNames.id}=?",
+      whereArgs: [note.id],
+    );
+  }
+
+
   Future DeleteEntry(Note note) async{
     final db = await instance.database;
     await db?.delete(NotesImpNames.tableName,

@@ -35,6 +35,9 @@ dev_dependencies:
   #Database
   sqflite: ^2.3.2
 
+  #flutter Toast Msg
+  fluttertoast: ^8.2.4
+
 
 
   flutter_lints: ^2.0.0

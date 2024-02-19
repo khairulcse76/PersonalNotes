@@ -21,7 +21,7 @@ class EditNote extends StatelessWidget {
         title: Text("Edit Note", style: TextStyle(color: Colors.white),),
         actions: [
           IconButton(onPressed: ()async{
-            Note newNote=Note(id: note.id,pin: false,title: heading, content: description, createdTime: DateTime.now());
+            Note newNote=Note(id: note.id,pin: false,isArchive: false, title: heading, content: description, createdTime: DateTime.now());
             await NotesDatabase.instance.UpdateData(newNote);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NoteView(note: newNote)));
           }, icon: Icon(Icons.save_outlined)),
