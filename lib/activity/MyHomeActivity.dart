@@ -6,7 +6,6 @@ import 'package:mynotes/model/MyNoteModel.dart';
 import 'package:mynotes/services/db.dart';
 import 'package:mynotes/widgets/DrawerMenuItem.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
 import 'AddNote.dart';
 
 class MyHomeActivity extends StatefulWidget {
@@ -20,10 +19,9 @@ class _MyHomeActivityState extends State<MyHomeActivity> {
 
   List<Note> notesList = [];
 bool isLoading = true;
-bool isGridView=true;
+bool isGridView=false;
 
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
-  bool grid=false;
 
   @override
   void initState() {
@@ -139,9 +137,9 @@ bool isGridView=true;
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.symmetric(vertical: 5),
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white.withOpacity(0.5)),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color:index.isOdd?Colors.white.withOpacity(0.3): Colors.white.withOpacity(0.4),
+                  border: Border.all(color: Colors.white.withOpacity(0.3)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  //color:index.isOdd?Colors.white.withOpacity(0.3): Colors.white.withOpacity(0.4),
               ),
               //width: MediaQuery.of(context).size.width,
               child: Column(
@@ -150,7 +148,7 @@ bool isGridView=true;
                 children: [
                   Text(notesList[index].title, style: TextStyle(fontSize: 22, color: myWhite, fontWeight: FontWeight.bold),),
                   SizedBox(height: 5,),
-                  Text(notesList[index].content.length>250?"${notesList[index].content.substring(0,201)}....." : notesList[index].content , style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.9)),),
+                  Text(notesList[index].content.length>250?"${notesList[index].content.substring(0,201)}....see more" : notesList[index].content , style: TextStyle(fontSize: 18, color: myWhite.withOpacity(0.9)),),
                 ],
               ),
             ),
@@ -190,9 +188,9 @@ bool isGridView=true;
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(notesList[index].title, style: TextStyle(fontSize: 22, color: myWhite.withOpacity(0.9), fontWeight: FontWeight.bold),),
+                                Text(notesList[index].title, style: TextStyle(fontSize: 22, color: myWhite, fontWeight: FontWeight.bold),),
                                 SizedBox(height: 5,),
-                                Text(notesList[index].content.length>250?"${notesList[index].content.substring(0,201)}....." : notesList[index].content , style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.7)),),
+                                Text(notesList[index].content.length>250?"${notesList[index].content.substring(0,201)}....see more" : notesList[index].content , style: TextStyle(fontSize: 18, color: myWhite.withOpacity(0.9)),),
                               ],
                             ),
                           ),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mynotes/activity/NoteView.dart';
 import 'package:mynotes/helper/colors.dart';
 import 'package:mynotes/model/MyNoteModel.dart';
+import 'package:mynotes/services/db.dart';
 import 'package:mynotes/widgets/DrawerMenuItem.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'AddNote.dart';
+import 'NoteView.dart';
 
 class ArchiveView extends StatefulWidget {
   const ArchiveView({super.key});
@@ -17,7 +18,27 @@ class ArchiveView extends StatefulWidget {
 class _ArchiveViewState extends State<ArchiveView> {
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
-  String heading="Heading";
+  List<Note> ArchivenoteList=[];
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    initializeData();
+
+  }
+  Future<void> initializeData() async {
+    await getArchiveNote();
+    setState(() {
+    });
+  }
+  Future getArchiveNote()async{
+    ArchivenoteList= await NotesDatabase.instance.ReadArchiveData();
+    print(ArchivenoteList);
+  }
+
+  String heading="noteList[index].title";
   String longNote="The platform offers a high  of customization, allowing users to pers onalize their device's appearance, change themes, and use widgets for a unique user experience. It accommodates a wide range of devices, including smartphones, tablets, smart TVs, and other smart devices, providing users with choices from various manufacturers"
       "Android integrates seamlessly with Google services like Gmail, Google Maps, and Google Drive. This integration enables the synchronization of data and services across devices, contributing to a cohesive user experience. The operating system features a robust notification system, empowering users to interact with messages and updates promptly.";
   String smallNote="seamlessly with Google services like Gmail";
@@ -33,12 +54,12 @@ class _ArchiveViewState extends State<ArchiveView> {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewNote(),));
         },
-        child: Icon(Icons.add),
         backgroundColor: cardColor,
         foregroundColor: myWhite2,
         splashColor: bgColor,
         hoverColor: Colors.green,
         elevation: 0.0,
+        child: const Icon(Icons.add),
       ),
       body: SafeArea(
         child: Stack(
@@ -66,7 +87,7 @@ class _ArchiveViewState extends State<ArchiveView> {
                     ),
                     /*ListViewCustom(context),*/
                     boxGridView(context),
-                    ColorGridView(context),
+                    //ColorGridView(context),
                   ],
                 ),
               ),
@@ -119,7 +140,7 @@ class _ArchiveViewState extends State<ArchiveView> {
   // my written codded
   Container boxGridView(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       //height: MediaQuery.of(context).size.height,
       child: MasonryGridView.count(
         scrollDirection: Axis.vertical,
@@ -127,28 +148,28 @@ class _ArchiveViewState extends State<ArchiveView> {
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: 120,
+        itemCount: ArchivenoteList.length,
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: (){
-             // Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(),));
+             Navigator.push(context, MaterialPageRoute(builder: (context) => NoteView(note: ArchivenoteList[index],),));
             },
             child: Container(
               padding: const EdgeInsets.all(8),
               //margin: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.white.withOpacity(0.3)),
-                  borderRadius: BorderRadius.all(Radius.circular(10))
+                  borderRadius: const BorderRadius.all(Radius.circular(10))
               ),
               //width: MediaQuery.of(context).size.width,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(heading, style: TextStyle(fontSize: 22, color: myWhite.withOpacity(0.9), fontWeight: FontWeight.bold),),
+                  Text( ArchivenoteList[index].title.toString(), style: TextStyle(fontSize: 22, color: myWhite.withOpacity(0.9), fontWeight: FontWeight.bold),),
                   SizedBox(height: 5,),
-                  Text(index.isOdd?longNote.length>250?"${longNote.substring(0,201)}....." : longNote :smallNote, style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.7)),),
+                  Text(ArchivenoteList[index].content.toString().length>250?"${ArchivenoteList[index].content.toString().substring(0,201)}....." : ArchivenoteList[index].content.toString() , style: TextStyle(fontSize: 17, color: myWhite.withOpacity(0.7)),),
                 ],
               ),
             ),

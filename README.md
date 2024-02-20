@@ -11,3 +11,5 @@ import 'package:sqflite/sqflite.dart';
 fluttertoast: ^8.2.4
 import 'package:fluttertoast/fluttertoast.dart';
 
+firebase SHA configuration run its to cmd with change username
+keytool -list -v -alias androiddebugkey -keystore C:\Users\YourUsername\.android\debug.keystore

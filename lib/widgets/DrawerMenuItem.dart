@@ -88,7 +88,7 @@ Widget NoteArchive(context){
           )
       ),
       onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ArchiveView(),));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const ArchiveView(),));
       },
       child: Container(
         margin: EdgeInsets.only(left: 15),
